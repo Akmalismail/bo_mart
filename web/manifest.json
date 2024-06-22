@@ -1,6 +1,6 @@
 {
-    "name": "bo_shop",
-    "short_name": "bo_shop",
+    "name": "bo_mart",
+    "short_name": "bo_mart",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
