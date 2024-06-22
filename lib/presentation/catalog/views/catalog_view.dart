@@ -1,3 +1,6 @@
+import 'package:bo_mart/app/app_router.dart';
+import 'package:bo_mart/common/constants/styles.dart';
+import 'package:bo_mart/common/widgets/custom_app_bar.dart';
 import 'package:bo_mart/presentation/catalog/widgets/catalog_item.dart';
 import 'package:bo_mart/presentation/catalog/widgets/catalog_search.dart';
 import 'package:flutter/material.dart';
@@ -19,63 +22,15 @@ class _CatalogViewState extends State<CatalogView> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox.square(
-              dimension: 40,
-              child: BackButton(
-                style: IconButton.styleFrom(
-                  iconSize: 16,
-                ),
-              ),
+      appBar: const CustomAppBar(titleText: 'Categories Name'),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppPadding.p15,
+              vertical: AppPadding.p10,
             ),
-            Expanded(
-              child: Text(
-                'Categories Name',
-                style: theme.textTheme.titleMedium!.copyWith(
-                  color: theme.colorScheme.onPrimary,
-                ),
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          Text(
-            'Company Name',
-            style: theme.textTheme.labelMedium!.copyWith(
-              color: theme.colorScheme.onPrimary,
-            ),
-          ),
-          const SizedBox(width: 5),
-          Container(
-            padding: const EdgeInsets.all(5),
-            decoration: BoxDecoration(
-              color: theme.colorScheme.onPrimary,
-              shape: BoxShape.circle,
-            ),
-            child: Text(
-              'CN',
-              style: TextStyle(
-                color: theme.colorScheme.primary,
-              ),
-            ),
-          ),
-          IconButton(
-            icon: const Icon(Icons.more_vert),
-            onPressed: () {},
-          ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 15,
-          vertical: 10,
-        ),
-        child: Column(
-          children: [
-            Row(
+            child: Row(
               children: [
                 const Expanded(
                   child: CatalogSearch(),
@@ -85,37 +40,48 @@ class _CatalogViewState extends State<CatalogView> {
                   alignment: Alignment.topRight,
                   offset: const Offset(-4, 4),
                   child: IconButton(
-                    onPressed: () {},
+                    style: IconButton.styleFrom(
+                      backgroundColor: theme.colorScheme.onPrimary,
+                      foregroundColor: theme.colorScheme.inverseSurface,
+                    ),
                     icon: const Icon(
                       Icons.shopping_cart_outlined,
                     ),
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(Routes.cartView);
+                    },
                   ),
                 )
               ],
             ),
-            const SizedBox(height: 10),
-            Expanded(
-              child: productList(),
-            )
-          ],
-        ),
+          ),
+          Expanded(
+            child: productList(),
+          )
+        ],
       ),
     );
   }
 
   Widget productList() {
     const int length = 4;
-    return ListView.separated(
-      itemCount: length + 1,
-      separatorBuilder: (_, __) => const Divider(),
-      itemBuilder: (context, index) {
-        /// if last item return nothing
-        if (index == length) {
-          return const SizedBox.shrink();
-        }
+    return Container(
+      // color: Colors.white,
+      child: ListView.separated(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppPadding.p15,
+        ),
+        itemCount: length + 1,
+        separatorBuilder: (_, __) => const Divider(),
+        itemBuilder: (context, index) {
+          /// if last item return nothing
+          if (index == length) {
+            return const SizedBox.shrink();
+          }
 
-        return const CatalogItem();
-      },
+          return const CatalogItem();
+        },
+      ),
     );
   }
 }

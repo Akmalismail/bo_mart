@@ -1,10 +1,9 @@
 import 'package:bo_mart/common/constants/styles.dart';
-import 'package:bo_mart/common/utils.dart/extensions.dart';
-import 'package:bo_mart/presentation/catalog/widgets/item_quantity_selector.dart';
+import 'package:bo_mart/presentation/cart/widgets/total_display.dart';
 import 'package:flutter/material.dart';
 
-class CatalogItem extends StatelessWidget {
-  const CatalogItem({
+class CartItem extends StatelessWidget {
+  const CartItem({
     super.key,
   });
 
@@ -58,55 +57,28 @@ class CatalogItem extends StatelessWidget {
               ),
               child: Image.network(
                 'https://picsum.photos/75',
-                height: 60,
+                height: 40,
               ),
             )
           ],
         ),
         const SizedBox(height: 10),
-        SizedBox(
-          height: 35,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: theme.borderColor,
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    TextButton(
-                        style: TextButton.styleFrom(
-                          shape: const RoundedRectangleBorder(),
-                          foregroundColor: theme.colorScheme.inverseSurface,
-                        ),
-                        onPressed: () {},
-                        child: const Text(
-                          'UNIT',
-                        )),
-                    VerticalDivider(
-                      color: theme.borderColor,
-                      width: 0,
-                    ),
-                    const ItemQuantitySelector(),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 10),
-              LayoutBuilder(
-                builder: (_, constraints) => SizedBox.square(
-                  dimension: constraints.maxHeight,
-                  child: IconButton(
-                    iconSize: 18,
-                    icon: const Icon(Icons.add),
-                    onPressed: () {},
-                  ),
-                ),
-              ),
-            ],
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            TotalDisplay(
+              label: 'Order',
+              value: '2 UNIT',
+              arrowIcon: true,
+              borderColor: theme.colorScheme.primary,
+            ),
+            const SizedBox(width: 10),
+            const TotalDisplay(
+              label: 'Total',
+              value: 'RM 100.00',
+              borderColor: Colors.amber,
+            ),
+          ],
         ),
       ],
     );

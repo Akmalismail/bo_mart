@@ -1,3 +1,4 @@
+import 'package:bo_mart/common/constants/styles.dart';
 import 'package:flutter/material.dart';
 
 class CustomIconButton extends StatelessWidget {
@@ -18,7 +19,7 @@ class CustomIconButton extends StatelessWidget {
       customBorder: const CircleBorder(),
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.all(5),
+        padding: const EdgeInsets.all(AppPadding.p5),
         child: Icon(
           icon,
           size: theme.textTheme.bodyMedium!.fontSize!,
