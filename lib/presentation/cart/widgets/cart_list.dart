@@ -1,5 +1,5 @@
 import 'package:bo_mart/common/constants/styles.dart';
-import 'package:bo_mart/domain/models/cart_item_modal.dart';
+import 'package:bo_mart/domain/models/cart_item_model.dart';
 import 'package:bo_mart/presentation/cart/provider/cart_provider.dart';
 import 'package:bo_mart/presentation/cart/widgets/cart_item.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +11,7 @@ class CartList extends ConsumerWidget {
     super.key,
   });
 
-  final List<CartItemModal> items;
+  final List<CartItemModel> items;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -22,18 +22,17 @@ class CartList extends ConsumerWidget {
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
       ),
-      sliver: SliverPadding(
-        padding: const EdgeInsets.symmetric(
-          vertical: AppPadding.p10,
-          horizontal: AppPadding.p15,
-        ),
-        sliver: SliverList.separated(
-          itemCount: cartItems.length + 1,
-          separatorBuilder: (_, __) => const Divider(),
-          itemBuilder: (context, index) {
-            /// if last item return nothing
-            if (index == items.length) {
-              return const Row(
+      sliver: SliverList.builder(
+        itemCount: cartItems.length + 1,
+        itemBuilder: (context, index) {
+          /// if last item return nothing
+          if (index == items.length) {
+            return const Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: AppPadding.p15,
+                vertical: AppPadding.p10,
+              ),
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text('Total'),
@@ -44,14 +43,32 @@ class CartList extends ConsumerWidget {
                     ),
                   ),
                 ],
-              );
-            }
-
-            return CartItem(
-              item: items[index],
+              ),
             );
-          },
-        ),
+          }
+
+          return Dismissible(
+            key: ObjectKey(items[index]),
+            background: Container(
+              color: AppColors.red,
+            ),
+            onDismissed: (_) {
+              ref.read(cartNotifierProvider.notifier).removeItem(index: index);
+            },
+            child: Column(
+              children: [
+                CartItem(
+                  item: items[index],
+                ),
+                const Divider(
+                  height: 1,
+                  indent: AppPadding.p15,
+                  endIndent: AppPadding.p15,
+                )
+              ],
+            ),
+          );
+        },
       ),
     );
   }

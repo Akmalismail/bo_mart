@@ -16,6 +16,8 @@ part 'product.g.dart';
 
 @freezed
 class Product with _$Product {
+  const Product._();
+
   const factory Product({
     required int id,
     required String name,
@@ -54,6 +56,6 @@ class Product with _$Product {
 
   @override
   String toString() {
-    return super.name;
+    return 'Product: id - $id, name - $name';
   }
 }
