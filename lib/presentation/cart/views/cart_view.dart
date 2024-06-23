@@ -14,7 +14,19 @@ class CartView extends ConsumerWidget {
     final cartItems = ref.watch(cartNotifierProvider);
 
     return Scaffold(
-      appBar: const CustomAppBar(titleText: 'Cart'),
+      appBar: CustomAppBar(
+        titleText: 'Cart',
+        menu: cartItems.isNotEmpty
+            ? [
+                MenuItemButton(
+                  child: const Text('Clear cart'),
+                  onPressed: () {
+                    ref.read(cartNotifierProvider.notifier).clearCart();
+                  },
+                )
+              ]
+            : null,
+      ),
       body: cartItems.isEmpty
           ? SizedBox(
               width: double.infinity,

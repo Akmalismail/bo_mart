@@ -48,4 +48,8 @@ class CartNotifier extends _$CartNotifier {
     items.removeAt(index);
     state = items;
   }
+
+  void clearCart() {
+    ref.invalidateSelf();
+  }
 }
