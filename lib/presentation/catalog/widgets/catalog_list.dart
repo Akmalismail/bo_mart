@@ -1,9 +1,9 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:bo_mart/common/constants/constants.dart';
 import 'package:bo_mart/common/constants/styles.dart';
 import 'package:bo_mart/common/utils/custom_page_controller.dart';
+import 'package:bo_mart/common/widgets/full_screen_message.dart';
 import 'package:bo_mart/domain/models/product.dart';
 import 'package:bo_mart/presentation/catalog/providers/catalog_provider.dart';
 import 'package:bo_mart/presentation/catalog/widgets/catalog_item.dart';
@@ -35,25 +35,27 @@ class _CatalogListState extends ConsumerState<CatalogList> {
   @override
   void initState() {
     super.initState();
-
-    pagingController.addStatusListener(_pagingStatusListener);
-    pagingController.addPageRequestListener((pageKey) {
-      ref
-          .read(catalogNotifierProvider(pagingController).notifier)
-          .fetchProducts(pageKey);
-    });
-    pagingController.refresh();
-  }
-
-  @override
-  void dispose() {
-    pagingController.removeStatusListener(_pagingStatusListener);
-    super.dispose();
+    // pagingController.addPageRequestListener((pageKey) {
+    //   print('listener $pageKey');
+    //   ref
+    //       .read(catalogNotifierProvider(pagingController).notifier)
+    //       .fetchProducts(pageKey);
+    // });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   // pagingController.refresh();
+    // });
   }
 
   @override
   Widget build(BuildContext context) {
-    ref.watch(catalogNotifierProvider(pagingController));
+    final theme = Theme.of(context);
+    final provider = catalogNotifierProvider(pagingController);
+    ref.watch(provider);
+    ref.listen(provider, (_, next) {
+      if (next is AsyncData && _completer != null && !_completer!.isCompleted) {
+        _completer!.complete();
+      }
+    });
 
     return RefreshIndicator(
       onRefresh: () async {
@@ -104,45 +106,19 @@ class _CatalogListState extends ConsumerState<CatalogList> {
             );
           },
           firstPageErrorIndicatorBuilder: (_) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  pagingController.error,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                const SizedBox(height: 45),
-                SizedBox(
-                  height: 60,
-                  width: double.infinity,
-                  child: ElevatedButton.icon(
-                    onPressed: () {
-                      pagingController.refresh();
-                    },
-                    icon: const Icon(
-                      Icons.refresh,
-                    ),
-                    label: const Text(
-                      'Try Again',
-                    ),
-                  ),
-                ),
-              ],
+            return FullScreenMessage(
+              title: 'Uh oh!',
+              message:
+                  'Looks like there was a problem retrieving our products.\nPlease try again later.',
+              buttonText: 'Try Again',
+              buttonIcon: Icons.refresh,
+              onButtonPressed: () {
+                pagingController.refresh();
+              },
             );
           },
         ),
       ),
     );
-  }
-
-  void _pagingStatusListener(PagingStatus status) {
-    log(status.name);
-    if (status == PagingStatus.ongoing || status == PagingStatus.noItemsFound) {
-      _completer?.complete();
-      _completer == null;
-    }
   }
 }

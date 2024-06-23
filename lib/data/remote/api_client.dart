@@ -16,10 +16,10 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 class ApiClient {
   late final Dio _dio;
 
-  ApiClient._internal();
+  ApiClient._();
 
   static Future<ApiClient> initialize() async {
-    final client = ApiClient._internal();
+    final client = ApiClient._();
     await client._initializeDio();
     return client;
   }

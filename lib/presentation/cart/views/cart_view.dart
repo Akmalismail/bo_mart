@@ -1,5 +1,6 @@
 import 'package:bo_mart/common/constants/styles.dart';
 import 'package:bo_mart/common/widgets/custom_app_bar.dart';
+import 'package:bo_mart/common/widgets/full_screen_message.dart';
 import 'package:bo_mart/presentation/cart/provider/cart_provider.dart';
 import 'package:bo_mart/presentation/cart/widgets/cart_list.dart';
 import 'package:flutter/material.dart';
@@ -28,30 +29,39 @@ class CartView extends ConsumerWidget {
             : null,
       ),
       body: cartItems.isEmpty
-          ? SizedBox(
-              width: double.infinity,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Your cart is empty!',
-                    style: theme.textTheme.titleLarge,
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    'You have no items in your cart.\nGo ahead and browse our catalog',
-                    style: theme.textTheme.titleSmall,
-                  ),
-                  const SizedBox(height: 10),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text('Continue Browsing'),
-                  )
-                ],
-              ),
+          ? FullScreenMessage(
+              title: 'Your cart is empty!',
+              message:
+                  'You have no items in your cart.\nGo ahead and browse our catalog',
+              buttonText: 'Continue Browsing',
+              onButtonPressed: () {
+                Navigator.of(context).pop();
+              },
             )
+          // ? SizedBox(
+          //     width: double.infinity,
+          //     child: Column(
+          //       mainAxisAlignment: MainAxisAlignment.center,
+          //       children: [
+          //         Text(
+          //           'Your cart is empty!',
+          //           style: theme.textTheme.titleLarge,
+          //         ),
+          //         const SizedBox(height: 10),
+          //         Text(
+          //           'You have no items in your cart.\nGo ahead and browse our catalog',
+          //           style: theme.textTheme.titleSmall,
+          //         ),
+          //         const SizedBox(height: 10),
+          //         ElevatedButton(
+          //           onPressed: () {
+          //             Navigator.of(context).pop();
+          //           },
+          //           child: const Text('Continue Browsing'),
+          //         )
+          //       ],
+          //     ),
+          //   )
           : Container(
               color: AppColors.grey,
               child: CustomScrollView(

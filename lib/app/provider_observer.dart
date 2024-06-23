@@ -3,13 +3,17 @@ import 'dart:developer';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Observer extends ProviderObserver {
+  final bool shouldLog = false;
+
   @override
   void didAddProvider(
     ProviderBase<Object?> provider,
     Object? value,
     ProviderContainer container,
   ) {
-    log('[Provider Observer] ${provider.name} was initialized with $value');
+    if (shouldLog) {
+      log('[Provider Observer] ${provider.name} was initialized with $value');
+    }
   }
 
   @override
@@ -17,7 +21,9 @@ class Observer extends ProviderObserver {
     ProviderBase<Object?> provider,
     ProviderContainer container,
   ) {
-    log('[Provider Observer] ${provider.name} was disposed');
+    if (shouldLog) {
+      log('[Provider Observer] ${provider.name} was disposed');
+    }
   }
 
   @override
@@ -27,9 +33,11 @@ class Observer extends ProviderObserver {
     Object? newValue,
     ProviderContainer container,
   ) {
-    log(
-      '[Provider Observer] ${provider.name} updated from $previousValue to $newValue',
-    );
+    if (shouldLog) {
+      log(
+        '[Provider Observer] ${provider.name} updated from $previousValue to $newValue',
+      );
+    }
   }
 
   @override
@@ -39,6 +47,8 @@ class Observer extends ProviderObserver {
     StackTrace stackTrace,
     ProviderContainer container,
   ) {
-    log('[Provider Observer] ${provider.name} threw $error at $stackTrace');
+    if (shouldLog) {
+      log('[Provider Observer] ${provider.name} threw $error at $stackTrace');
+    }
   }
 }

@@ -68,6 +68,9 @@ class CatalogItem extends ConsumerWidget {
                     child: Image.network(
                       product.images[0].srcSmall,
                       height: 60,
+                      errorBuilder: (_, __, ___) {
+                        return const SizedBox.shrink();
+                      },
                     ),
                   )
                 : const SizedBox(

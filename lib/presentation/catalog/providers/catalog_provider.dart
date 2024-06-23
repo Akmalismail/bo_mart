@@ -1,4 +1,5 @@
 import 'package:bo_mart/app/app_dependencies.dart';
+import 'package:bo_mart/data/responses/product_response.dart';
 import 'package:bo_mart/domain/models/product.dart';
 import 'package:bo_mart/domain/repository/product_repository.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -18,16 +19,32 @@ class CatalogNotifier extends _$CatalogNotifier {
     PagingController<int, Product> controller,
   ) async {
     _pagingController = controller;
+    _pagingController.addPageRequestListener(fetchProducts);
+    ref.onDispose(() {
+      _pagingController.removePageRequestListener(fetchProducts);
+    });
+
     return null;
   }
 
   Future<void> fetchProducts(int page) async {
-    await Future.delayed(const Duration(seconds: 3));
+    if (!state.isLoading) {
+      state = const AsyncLoading();
+    }
+
     _currentPage = page;
     final productRepository = getIt<ProductRepository>();
-    final response = await productRepository.fetchProducts(page);
+    late ProductResponse response;
+
+    try {
+      response = await productRepository.fetchProducts(page);
+    } on Exception catch (e, s) {
+      _pagingController.error = e;
+      state = AsyncError(e, s);
+      return;
+    }
+
     _totalPages = response.totalPages;
-    // _totalProducts = response.totalProducts;
 
     if (_currentPage >= _totalPages) {
       _pagingController.appendLastPage(response.products);
@@ -37,5 +54,7 @@ class CatalogNotifier extends _$CatalogNotifier {
         _currentPage + 1,
       );
     }
+
+    state = AsyncData(response.products);
   }
 }

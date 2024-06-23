@@ -21,9 +21,14 @@ class _CatalogViewState extends State<CatalogView> {
   final pagingController = CustomPagingController<int, Product>(
     firstPageKey: 1,
   );
-  final searchFieldController = TextEditingController();
   final debouncer = Debouncer();
   String searchText = '';
+
+  @override
+  void dispose() {
+    pagingController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
