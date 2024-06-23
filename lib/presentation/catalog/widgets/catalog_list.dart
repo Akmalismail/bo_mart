@@ -33,22 +33,7 @@ class _CatalogListState extends ConsumerState<CatalogList> {
   Completer<void>? _completer;
 
   @override
-  void initState() {
-    super.initState();
-    // pagingController.addPageRequestListener((pageKey) {
-    //   print('listener $pageKey');
-    //   ref
-    //       .read(catalogNotifierProvider(pagingController).notifier)
-    //       .fetchProducts(pageKey);
-    // });
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   // pagingController.refresh();
-    // });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final provider = catalogNotifierProvider(pagingController);
     ref.watch(provider);
     ref.listen(provider, (_, next) {
