@@ -4,19 +4,20 @@ import 'package:bo_mart/common/utils/custom_page_controller.dart';
 import 'package:bo_mart/common/utils/debouncer.dart';
 import 'package:bo_mart/common/widgets/custom_app_bar.dart';
 import 'package:bo_mart/domain/models/product.dart';
+import 'package:bo_mart/presentation/cart/provider/cart_provider.dart';
 import 'package:bo_mart/presentation/catalog/widgets/catalog_list.dart';
 import 'package:bo_mart/presentation/catalog/widgets/catalog_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CatalogView extends ConsumerStatefulWidget {
+class CatalogView extends StatefulWidget {
   const CatalogView({super.key});
 
   @override
-  ConsumerState<CatalogView> createState() => _CatalogViewState();
+  State<CatalogView> createState() => _CatalogViewState();
 }
 
-class _CatalogViewState extends ConsumerState<CatalogView> {
+class _CatalogViewState extends State<CatalogView> {
   final pagingController = CustomPagingController<int, Product>(
     firstPageKey: 1,
   );
@@ -50,22 +51,29 @@ class _CatalogViewState extends ConsumerState<CatalogView> {
                     },
                   ),
                 ),
-                Badge.count(
-                  count: 3,
-                  alignment: Alignment.topRight,
-                  offset: const Offset(-4, 4),
-                  child: IconButton(
-                    style: IconButton.styleFrom(
-                      backgroundColor: theme.colorScheme.onPrimary,
-                      foregroundColor: theme.colorScheme.inverseSurface,
-                    ),
-                    icon: const Icon(
-                      Icons.shopping_cart_outlined,
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pushNamed(Routes.cartView);
-                    },
-                  ),
+                Consumer(
+                  builder: (_, ref, __) {
+                    final cartItems = ref.watch(cartNotifierProvider);
+
+                    return Badge.count(
+                      count: cartItems.length,
+                      isLabelVisible: cartItems.isNotEmpty,
+                      alignment: Alignment.topRight,
+                      offset: const Offset(-4, 4),
+                      child: IconButton(
+                        style: IconButton.styleFrom(
+                          backgroundColor: theme.colorScheme.onPrimary,
+                          foregroundColor: theme.colorScheme.inverseSurface,
+                        ),
+                        icon: const Icon(
+                          Icons.shopping_cart_outlined,
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pushNamed(Routes.cartView);
+                        },
+                      ),
+                    );
+                  },
                 )
               ],
             ),

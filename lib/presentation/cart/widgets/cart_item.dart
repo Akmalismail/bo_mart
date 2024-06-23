@@ -1,11 +1,15 @@
 import 'package:bo_mart/common/constants/styles.dart';
+import 'package:bo_mart/domain/models/cart_item_modal.dart';
 import 'package:bo_mart/presentation/cart/widgets/total_display.dart';
 import 'package:flutter/material.dart';
 
 class CartItem extends StatelessWidget {
   const CartItem({
+    required this.item,
     super.key,
   });
+
+  final CartItemModal item;
 
   @override
   Widget build(BuildContext context) {
@@ -23,14 +27,14 @@ class CartItem extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        'SKU_12345',
+                        item.product.sku,
                         style: theme.textTheme.labelSmall!.copyWith(
                           color: Colors.grey,
                         ),
                       ),
                       const SizedBox(width: 5),
                       Text(
-                        '100 in stock',
+                        '${item.product.stockQuantity} in stock',
                         style: theme.textTheme.labelSmall!.copyWith(
                           fontWeight: FontWeight.w600,
                           color: AppColors.green,
@@ -39,7 +43,7 @@ class CartItem extends StatelessWidget {
                     ],
                   ),
                   Text(
-                    'Product name',
+                    item.product.name,
                     style: theme.textTheme.labelMedium,
                   ),
                   Text(
@@ -51,15 +55,19 @@ class CartItem extends StatelessWidget {
                 ],
               ),
             ),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(
-                AppRadius.r4,
-              ),
-              child: Image.network(
-                'https://picsum.photos/75',
-                height: 40,
-              ),
-            )
+            item.product.images.isNotEmpty
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(
+                      AppRadius.r4,
+                    ),
+                    child: Image.network(
+                      item.product.images[0].srcSmall,
+                      height: 60,
+                    ),
+                  )
+                : const SizedBox(
+                    height: 60,
+                  ),
           ],
         ),
         const SizedBox(height: 10),
@@ -68,7 +76,7 @@ class CartItem extends StatelessWidget {
           children: [
             TotalDisplay(
               label: 'Order',
-              value: '2 UNIT',
+              value: '${item.quantity} UNIT',
               arrowIcon: true,
               borderColor: theme.colorScheme.primary,
             ),

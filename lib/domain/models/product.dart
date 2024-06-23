@@ -24,8 +24,8 @@ class Product with _$Product {
     String? status,
     String? catalogVisibility,
     required String sku,
-    String? regularPrice,
-    String? salePrice,
+    @JsonKey(name: 'regular_price') required String regularPrice,
+    @JsonKey(name: 'sale_price') String? salePrice,
     String? taxClass,
     bool? manageStock,
     bool? inStock,
@@ -51,4 +51,9 @@ class Product with _$Product {
 
   factory Product.fromJson(Map<String, Object?> json) =>
       _$ProductFromJson(json);
+
+  @override
+  String toString() {
+    return super.name;
+  }
 }

@@ -1,10 +1,13 @@
 import 'package:bo_mart/common/constants/styles.dart';
 import 'package:bo_mart/common/utils/extensions.dart';
 import 'package:bo_mart/domain/models/product.dart';
+import 'package:bo_mart/presentation/cart/provider/cart_provider.dart';
+import 'package:bo_mart/presentation/catalog/providers/item_quantity_provider.dart';
 import 'package:bo_mart/presentation/catalog/widgets/item_quantity_selector.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CatalogItem extends StatelessWidget {
+class CatalogItem extends ConsumerWidget {
   const CatalogItem({
     required this.product,
     super.key,
@@ -13,8 +16,9 @@ class CatalogItem extends StatelessWidget {
   final Product product;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final quantity = ref.watch(itemQuantityNotifierProvider(product));
 
     return Column(
       children: [
@@ -48,7 +52,7 @@ class CatalogItem extends StatelessWidget {
                     style: theme.textTheme.labelMedium,
                   ),
                   Text(
-                    'RM 100.00',
+                    'RM ${double.parse(product.regularPrice).toStringAsFixed(2)}',
                     style: theme.textTheme.labelLarge!.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -98,7 +102,9 @@ class CatalogItem extends StatelessWidget {
                       color: theme.borderColor,
                       width: 0,
                     ),
-                    const ItemQuantitySelector(),
+                    ItemQuantitySelector(
+                      product: product,
+                    ),
                   ],
                 ),
               ),
@@ -109,7 +115,22 @@ class CatalogItem extends StatelessWidget {
                   child: IconButton(
                     iconSize: 18,
                     icon: const Icon(Icons.add),
-                    onPressed: () {},
+                    onPressed: () {
+                      ref.read(cartNotifierProvider.notifier).addItem(
+                            product: product,
+                            quantity: quantity,
+                          );
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                            backgroundColor: AppColors.green,
+                            content: Text(
+                              '${product.name} ($quantity) has been added to cart!',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            )),
+                      );
+                    },
                   ),
                 ),
               ),
