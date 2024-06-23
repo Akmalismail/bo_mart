@@ -102,11 +102,11 @@ class AppColors {
   static const Color grey = Color(0xFFF6F5F5);
 }
 
-class AppRadius {
+abstract class AppRadius {
   static const double r4 = 4.0;
 }
 
-class AppPadding {
+abstract class AppPadding {
   static const double p5 = 5.0;
   static const double p10 = 10.0;
   static const double p15 = 15.0;

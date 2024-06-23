@@ -1,12 +1,16 @@
 import 'package:bo_mart/common/constants/styles.dart';
-import 'package:bo_mart/common/utils.dart/extensions.dart';
+import 'package:bo_mart/common/utils/extensions.dart';
+import 'package:bo_mart/domain/models/product.dart';
 import 'package:bo_mart/presentation/catalog/widgets/item_quantity_selector.dart';
 import 'package:flutter/material.dart';
 
 class CatalogItem extends StatelessWidget {
   const CatalogItem({
+    required this.product,
     super.key,
   });
+
+  final Product product;
 
   @override
   Widget build(BuildContext context) {
@@ -24,14 +28,14 @@ class CatalogItem extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        'SKU_12345',
+                        product.sku,
                         style: theme.textTheme.labelSmall!.copyWith(
                           color: Colors.grey,
                         ),
                       ),
                       const SizedBox(width: 5),
                       Text(
-                        '100 in stock',
+                        '${product.stockQuantity} in stock',
                         style: theme.textTheme.labelSmall!.copyWith(
                           fontWeight: FontWeight.w600,
                           color: AppColors.green,
@@ -40,7 +44,7 @@ class CatalogItem extends StatelessWidget {
                     ],
                   ),
                   Text(
-                    'Product name',
+                    product.name,
                     style: theme.textTheme.labelMedium,
                   ),
                   Text(
@@ -52,15 +56,19 @@ class CatalogItem extends StatelessWidget {
                 ],
               ),
             ),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(
-                AppRadius.r4,
-              ),
-              child: Image.network(
-                'https://picsum.photos/75',
-                height: 60,
-              ),
-            )
+            product.images.isNotEmpty
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(
+                      AppRadius.r4,
+                    ),
+                    child: Image.network(
+                      product.images[0].srcSmall,
+                      height: 60,
+                    ),
+                  )
+                : const SizedBox(
+                    height: 60,
+                  ),
           ],
         ),
         const SizedBox(height: 10),

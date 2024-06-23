@@ -1,11 +1,11 @@
 import 'package:bo_mart/app/app_router.dart';
 import 'package:bo_mart/common/constants/styles.dart';
 import 'package:bo_mart/common/widgets/custom_app_bar.dart';
-import 'package:bo_mart/presentation/catalog/widgets/catalog_item.dart';
+import 'package:bo_mart/domain/models/product.dart';
+import 'package:bo_mart/presentation/catalog/widgets/catalog_list.dart';
 import 'package:bo_mart/presentation/catalog/widgets/catalog_search.dart';
 import 'package:flutter/material.dart';
-
-enum SampleItem { itemOne, itemTwo, itemThree }
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class CatalogView extends StatefulWidget {
   const CatalogView({super.key});
@@ -15,7 +15,20 @@ class CatalogView extends StatefulWidget {
 }
 
 class _CatalogViewState extends State<CatalogView> {
-  SampleItem? selectedItem;
+  final pagingController = PagingController<int, Product>(
+    firstPageKey: 1,
+  );
+  final searchFieldController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    pagingController.addPageRequestListener((pageKey) {
+      //  start load here
+    });
+    pagingController.refresh();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +45,11 @@ class _CatalogViewState extends State<CatalogView> {
             ),
             child: Row(
               children: [
-                const Expanded(
-                  child: CatalogSearch(),
+                Expanded(
+                  child: CatalogSearch(
+                    controller: searchFieldController,
+                    onChanged: (text) {},
+                  ),
                 ),
                 Badge.count(
                   count: 3,
@@ -56,31 +72,11 @@ class _CatalogViewState extends State<CatalogView> {
             ),
           ),
           Expanded(
-            child: productList(),
-          )
+              child: CatalogList(
+            pagingController: pagingController,
+            searchTerm: searchFieldController.text,
+          ))
         ],
-      ),
-    );
-  }
-
-  Widget productList() {
-    const int length = 4;
-    return Container(
-      // color: Colors.white,
-      child: ListView.separated(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppPadding.p15,
-        ),
-        itemCount: length + 1,
-        separatorBuilder: (_, __) => const Divider(),
-        itemBuilder: (context, index) {
-          /// if last item return nothing
-          if (index == length) {
-            return const SizedBox.shrink();
-          }
-
-          return const CatalogItem();
-        },
       ),
     );
   }

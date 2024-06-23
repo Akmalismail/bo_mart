@@ -1,0 +1,6 @@
+targets:
+  $default:
+    builders:
+      json_serializable:
+        options:
+          explicit_to_json: true # https://github.com/rrousselGit/freezed/issues/86
