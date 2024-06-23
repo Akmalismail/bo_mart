@@ -1,34 +1,28 @@
 import 'package:bo_mart/app/app_router.dart';
 import 'package:bo_mart/common/constants/styles.dart';
+import 'package:bo_mart/common/utils/custom_page_controller.dart';
+import 'package:bo_mart/common/utils/debouncer.dart';
 import 'package:bo_mart/common/widgets/custom_app_bar.dart';
 import 'package:bo_mart/domain/models/product.dart';
 import 'package:bo_mart/presentation/catalog/widgets/catalog_list.dart';
 import 'package:bo_mart/presentation/catalog/widgets/catalog_search.dart';
 import 'package:flutter/material.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CatalogView extends StatefulWidget {
+class CatalogView extends ConsumerStatefulWidget {
   const CatalogView({super.key});
 
   @override
-  State<CatalogView> createState() => _CatalogViewState();
+  ConsumerState<CatalogView> createState() => _CatalogViewState();
 }
 
-class _CatalogViewState extends State<CatalogView> {
-  final pagingController = PagingController<int, Product>(
+class _CatalogViewState extends ConsumerState<CatalogView> {
+  final pagingController = CustomPagingController<int, Product>(
     firstPageKey: 1,
   );
   final searchFieldController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-
-    pagingController.addPageRequestListener((pageKey) {
-      //  start load here
-    });
-    pagingController.refresh();
-  }
+  final debouncer = Debouncer();
+  String searchText = '';
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +41,13 @@ class _CatalogViewState extends State<CatalogView> {
               children: [
                 Expanded(
                   child: CatalogSearch(
-                    controller: searchFieldController,
-                    onChanged: (text) {},
+                    onChanged: (text) {
+                      debouncer.run(() {
+                        setState(() {
+                          searchText = text;
+                        });
+                      });
+                    },
                   ),
                 ),
                 Badge.count(
@@ -72,10 +71,11 @@ class _CatalogViewState extends State<CatalogView> {
             ),
           ),
           Expanded(
-              child: CatalogList(
-            pagingController: pagingController,
-            searchTerm: searchFieldController.text,
-          ))
+            child: CatalogList(
+              pagingController: pagingController,
+              searchText: searchText,
+            ),
+          )
         ],
       ),
     );

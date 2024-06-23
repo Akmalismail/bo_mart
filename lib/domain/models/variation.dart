@@ -27,7 +27,7 @@ class Variation with _$Variation {
     @JsonKey(name: 'manage_stock') required bool manageStock,
     @JsonKey(name: 'in_stock') required bool inStock,
     @JsonKey(name: 'stock_quantity') required int stockQuantity,
-    required int? weight,
+    String? weight,
     required Dimensions? dimensions,
     @JsonKey(name: 'backorders_allowed') required bool backordersAllowed,
     required String? description,

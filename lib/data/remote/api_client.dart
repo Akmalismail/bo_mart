@@ -47,12 +47,13 @@ class ApiClient {
     if (!kReleaseMode) {
       dio.interceptors.add(
         PrettyDioLogger(
-          request: true,
-          requestHeader: true,
-          requestBody: true,
-          responseHeader: true,
-          responseBody: true,
-          error: true,
+          responseBody: false,
+          // request: true,
+          // requestHeader: true,
+          // requestBody: true,
+          // responseHeader: true,
+          // responseBody: true,
+          // error: true,
         ),
       );
     }
@@ -60,7 +61,7 @@ class ApiClient {
     _dio = dio;
   }
 
-  Future<Response> get<T>(
+  Future<Response> get(
     String endpoint, {
     Map<String, dynamic>? query,
   }) async {

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 
@@ -18,4 +20,9 @@ extension ConnectivityX on Connectivity {
       ].contains,
     );
   }
+}
+
+extension HttpHeadersX on HttpHeaders {
+  static const xWCTotalPagesHeader = 'x-wc-totalpages';
+  static const xWCTotalHeader = 'x-wc-total';
 }

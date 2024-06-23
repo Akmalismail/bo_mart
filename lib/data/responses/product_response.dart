@@ -8,6 +8,8 @@ part 'product_response.g.dart';
 class ProductResponse with _$ProductResponse {
   const factory ProductResponse({
     required List<Product> products,
+    @Default(0) int totalPages,
+    @Default(0) int totalProducts,
   }) = _ProductResponse;
 
   factory ProductResponse.fromJson(Map<String, Object?> json) =>
