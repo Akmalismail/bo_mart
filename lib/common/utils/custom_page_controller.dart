@@ -30,7 +30,6 @@ class CustomPagingController<PageKeyType, ItemType>
     final itemList = previousItems + newItems;
     value = PagingState<PageKeyType, ItemType>(
       itemList: itemList,
-      error: null,
       nextPageKey: nextPageKey,
     );
     // reduction

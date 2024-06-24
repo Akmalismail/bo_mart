@@ -1,4 +1,5 @@
 import 'package:bo_mart/common/constants/styles.dart';
+import 'package:bo_mart/common/utils/helper.dart';
 import 'package:bo_mart/domain/models/cart_item_model.dart';
 import 'package:bo_mart/presentation/cart/widgets/total_display.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,11 @@ class CartItem extends StatelessWidget {
   });
 
   final CartItemModel item;
+  double get price => double.parse(item.variation.regularPrice);
+  double get totalPrice =>
+      double.parse(item.variation.regularPrice) * item.quantity;
+
+  int get stock => calculateStock(item.variation, item.product);
 
   @override
   Widget build(BuildContext context) {
@@ -48,11 +54,11 @@ class CartItem extends StatelessWidget {
                       ],
                     ),
                     Text(
-                      item.product.name,
+                      item.product.name ?? '',
                       style: theme.textTheme.labelMedium,
                     ),
                     Text(
-                      'RM 100.00',
+                      'RM ${price.toStringAsFixed(2)}',
                       style: theme.textTheme.labelLarge!.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -86,9 +92,9 @@ class CartItem extends StatelessWidget {
                 borderColor: theme.colorScheme.primary,
               ),
               const SizedBox(width: 10),
-              const TotalDisplay(
+              TotalDisplay(
                 label: 'Total',
-                value: 'RM 100.00',
+                value: 'RM ${totalPrice.toStringAsFixed(2)}',
                 borderColor: Colors.amber,
               ),
             ],

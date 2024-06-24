@@ -16,7 +16,7 @@ part 'variation.g.dart';
 class Variation with _$Variation {
   const factory Variation({
     required int id,
-    @JsonKey(name: 'date_modified') required String dateModifie,
+    @JsonKey(name: 'date_modified') required String dateModified,
     required String type,
     required String status,
     @JsonKey(name: 'catalog_visibility') required String catalogVisibility,

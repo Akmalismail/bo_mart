@@ -92,6 +92,16 @@ class AppTheme {
             fontSize: 16,
           ),
         ),
+        menuTheme: MenuThemeData(
+          style: MenuStyle(
+            backgroundColor: WidgetStatePropertyAll(
+              _lightColorScheme.onPrimary,
+            ),
+            padding: const WidgetStatePropertyAll(
+              EdgeInsets.zero,
+            ),
+          ),
+        ),
       );
 }
 

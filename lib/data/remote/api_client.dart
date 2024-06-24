@@ -34,7 +34,7 @@ class ApiClient {
     Map<String, dynamic> headers = {
       Headers.contentTypeHeader: Headers.jsonContentType,
       'Authorization':
-          'Basic ${base64.encode(utf8.encode('$username:$password'))}'
+          'Basic ${base64.encode(utf8.encode('$username:$password'))}',
     };
 
     dio.options = BaseOptions(

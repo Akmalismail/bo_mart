@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:bo_mart/app/app_dependencies.dart';
 import 'package:bo_mart/data/responses/product_response.dart';
 import 'package:bo_mart/domain/models/product.dart';
 import 'package:bo_mart/domain/repository/product_repository.dart';
+import 'package:flutter/services.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -11,7 +14,6 @@ part 'catalog_provider.g.dart';
 class CatalogNotifier extends _$CatalogNotifier {
   late PagingController<int, Product> _pagingController;
   int _totalPages = 0;
-  // int _totalProducts = 0;
   int _currentPage = 1;
 
   @override
@@ -22,6 +24,19 @@ class CatalogNotifier extends _$CatalogNotifier {
     _pagingController.addPageRequestListener(fetchProducts);
     ref.onDispose(() {
       _pagingController.removePageRequestListener(fetchProducts);
+    });
+
+    _pagingController.addStatusListener((status) {
+      if (status == PagingStatus.completed) {
+        // print(_pagingController.itemList!.map((item) => item.toJson()));
+        Clipboard.setData(
+          ClipboardData(
+            text: jsonEncode(
+              _pagingController.itemList!.map((item) => item.toJson()).toList(),
+            ),
+          ),
+        );
+      }
     });
 
     return null;

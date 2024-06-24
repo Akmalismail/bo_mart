@@ -26,20 +26,28 @@ class ProductRepository {
       );
 
       final products = await parseResponse(
-          jsonEncode(response.data), ProductResponse.fromJson);
-      final int totalPages = int.parse(response.headers.value(
-        HttpHeadersX.xWCTotalPagesHeader,
-      )!);
-      final int totalProducts = int.parse(response.headers.value(
-        HttpHeadersX.xWCTotalHeader,
-      )!);
+        jsonEncode(response.data),
+        ProductResponse.fromJson,
+      );
+      final int totalPages = int.parse(
+        response.headers.value(
+          HttpHeadersX.xWCTotalPagesHeader,
+        )!,
+      );
+      final int totalProducts = int.parse(
+        response.headers.value(
+          HttpHeadersX.xWCTotalHeader,
+        )!,
+      );
 
-      _storeProducts(
-        response: products.copyWith(
-          totalPages: totalPages,
-          totalProducts: totalProducts,
+      unawaited(
+        _storeProducts(
+          response: products.copyWith(
+            totalPages: totalPages,
+            totalProducts: totalProducts,
+          ),
+          page: page,
         ),
-        page: page,
       );
 
       return products.copyWith(

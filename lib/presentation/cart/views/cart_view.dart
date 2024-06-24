@@ -1,6 +1,7 @@
 import 'package:bo_mart/common/constants/styles.dart';
 import 'package:bo_mart/common/widgets/custom_app_bar.dart';
 import 'package:bo_mart/common/widgets/full_screen_message.dart';
+import 'package:bo_mart/domain/models/cart_item_model.dart';
 import 'package:bo_mart/presentation/cart/provider/cart_provider.dart';
 import 'package:bo_mart/presentation/cart/widgets/cart_list.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,11 @@ class CartView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final cartItems = ref.watch(cartNotifierProvider);
+    final List<CartItemModel> cartItems = ref.watch(cartNotifierProvider);
+    final double totalPrice = cartItems.fold(0, (previousValue, element) {
+      double price = double.parse(element.variation.regularPrice);
+      return previousValue + price * element.quantity;
+    });
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -24,7 +29,7 @@ class CartView extends ConsumerWidget {
                   onPressed: () {
                     ref.read(cartNotifierProvider.notifier).clearCart();
                   },
-                )
+                ),
               ]
             : null,
       ),
@@ -38,36 +43,33 @@ class CartView extends ConsumerWidget {
                 Navigator.of(context).pop();
               },
             )
-          // ? SizedBox(
-          //     width: double.infinity,
-          //     child: Column(
-          //       mainAxisAlignment: MainAxisAlignment.center,
-          //       children: [
-          //         Text(
-          //           'Your cart is empty!',
-          //           style: theme.textTheme.titleLarge,
-          //         ),
-          //         const SizedBox(height: 10),
-          //         Text(
-          //           'You have no items in your cart.\nGo ahead and browse our catalog',
-          //           style: theme.textTheme.titleSmall,
-          //         ),
-          //         const SizedBox(height: 10),
-          //         ElevatedButton(
-          //           onPressed: () {
-          //             Navigator.of(context).pop();
-          //           },
-          //           child: const Text('Continue Browsing'),
-          //         )
-          //       ],
-          //     ),
-          //   )
           : Container(
               color: AppColors.grey,
               child: CustomScrollView(
                 slivers: [
                   CartList(
                     items: cartItems,
+                  ),
+                  SliverToBoxAdapter(
+                    child: Container(
+                      color: theme.colorScheme.onPrimary,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppPadding.p15,
+                        vertical: AppPadding.p10,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text('Total'),
+                          Text(
+                            'RM ${totalPrice.toStringAsFixed(2)}',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                   const DecoratedSliver(
                     decoration: BoxDecoration(
@@ -110,9 +112,9 @@ class CartView extends ConsumerWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const Text(
-                          'RM 500.00',
-                          style: TextStyle(
+                        Text(
+                          'RM ${totalPrice.toStringAsFixed(2)}',
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -121,7 +123,7 @@ class CartView extends ConsumerWidget {
                     ElevatedButton(
                       onPressed: () {},
                       child: const Text('Checkout'),
-                    )
+                    ),
                   ],
                 ),
               ),

@@ -23,30 +23,8 @@ class CartList extends ConsumerWidget {
         color: theme.colorScheme.surface,
       ),
       sliver: SliverList.builder(
-        itemCount: cartItems.length + 1,
+        itemCount: cartItems.length,
         itemBuilder: (context, index) {
-          /// if last item return nothing
-          if (index == items.length) {
-            return const Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: AppPadding.p15,
-                vertical: AppPadding.p10,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Total'),
-                  Text(
-                    'RM 500.00',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }
-
           return Dismissible(
             key: ObjectKey(items[index]),
             background: Container(
@@ -64,7 +42,7 @@ class CartList extends ConsumerWidget {
                   height: 1,
                   indent: AppPadding.p15,
                   endIndent: AppPadding.p15,
-                )
+                ),
               ],
             ),
           );

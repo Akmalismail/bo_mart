@@ -21,7 +21,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       automaticallyImplyLeading: false,
       title: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox.square(
             dimension: 40,
@@ -63,11 +62,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ),
         MenuAnchor(
-          style: const MenuStyle(
-            padding: WidgetStatePropertyAll(
-              EdgeInsets.zero,
-            ),
-          ),
           menuChildren: menu ?? [],
           builder: (_, controller, __) {
             return IconButton(

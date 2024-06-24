@@ -7,7 +7,7 @@ final GetIt getIt = GetIt.I;
 
 Future<void> setupAppDependencies() async {
   /// .env
-  await dotenv.load(fileName: ".env");
+  await dotenv.load();
 
   /// api client
   final client = await ApiClient.initialize();

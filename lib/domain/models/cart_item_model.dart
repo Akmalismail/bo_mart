@@ -10,6 +10,7 @@ class CartItemModel with _$CartItemModel {
   const factory CartItemModel({
     required Product product,
     required int quantity,
+    required Product variation,
   }) = _CartItemModal;
 
   @override

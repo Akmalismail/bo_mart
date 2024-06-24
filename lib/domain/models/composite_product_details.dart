@@ -9,7 +9,7 @@ part 'composite_product_details.g.dart';
 class CompositeProductDetails with _$CompositeProductDetails {
   const factory CompositeProductDetails({
     @JsonKey(name: 'per_item_pricing') required bool perItemPricing,
-    required String name,
+    String? name,
   }) = _CompositeProductDetails;
 
   factory CompositeProductDetails.fromJson(Map<String, Object?> json) =>

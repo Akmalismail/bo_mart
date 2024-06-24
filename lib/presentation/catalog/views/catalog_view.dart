@@ -79,7 +79,7 @@ class _CatalogViewState extends State<CatalogView> {
                       ),
                     );
                   },
-                )
+                ),
               ],
             ),
           ),
@@ -88,7 +88,7 @@ class _CatalogViewState extends State<CatalogView> {
               pagingController: pagingController,
               searchText: searchText,
             ),
-          )
+          ),
         ],
       ),
     );

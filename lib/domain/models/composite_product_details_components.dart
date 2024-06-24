@@ -26,6 +26,7 @@ class CompositeProductDetailsComponents
   }) = _CompositeProductDetailsComponents;
 
   factory CompositeProductDetailsComponents.fromJson(
-          Map<String, Object?> json) =>
+    Map<String, Object?> json,
+  ) =>
       _$CompositeProductDetailsComponentsFromJson(json);
 }
