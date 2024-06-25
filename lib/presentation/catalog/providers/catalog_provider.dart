@@ -15,12 +15,6 @@ class CatalogNotifier extends _$CatalogNotifier {
       state = const AsyncLoading();
     }
 
-    if (page == 3) {
-      await Future.delayed(const Duration(seconds: 3));
-      state = AsyncError(Exception(), StackTrace.current);
-      return;
-    }
-
     final productRepository = getIt<ProductRepository>();
     late ProductResponse response;
 

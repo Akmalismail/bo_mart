@@ -55,7 +55,7 @@ class _CatalogListState extends ConsumerState<CatalogList> {
       }
 
       switch (next) {
-        case AsyncData(:final value!):
+        case AsyncData(:final value?):
           if (value.currentPage >= value.totalPages) {
             pagingController.appendLastPage(value.products);
           } else {
