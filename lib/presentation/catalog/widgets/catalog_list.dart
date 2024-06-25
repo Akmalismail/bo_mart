@@ -33,12 +33,41 @@ class _CatalogListState extends ConsumerState<CatalogList> {
   Completer<void>? _completer;
 
   @override
+  void initState() {
+    super.initState();
+    pagingController.addPageRequestListener(_fetchProducts);
+  }
+
+  @override
+  void dispose() {
+    pagingController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final provider = catalogNotifierProvider(pagingController);
+    // final provider = catalogNotifierProvider(pagingController);
+    final provider = catalogNotifierProvider;
     ref.watch(provider);
     ref.listen(provider, (_, next) {
       if (next is AsyncData && _completer != null && !_completer!.isCompleted) {
         _completer!.complete();
+      }
+
+      switch (next) {
+        case AsyncData(:final value!):
+          if (value.currentPage >= value.totalPages) {
+            pagingController.appendLastPage(value.products);
+          } else {
+            pagingController.appendPage(
+              value.products,
+              value.currentPage + 1,
+            );
+          }
+          break;
+        case AsyncError(:final error):
+          pagingController.error = error;
+          break;
       }
     });
 
@@ -105,5 +134,9 @@ class _CatalogListState extends ConsumerState<CatalogList> {
         ),
       ),
     );
+  }
+
+  void _fetchProducts(int pageKey) {
+    ref.read(catalogNotifierProvider.notifier).fetchProducts(pageKey);
   }
 }

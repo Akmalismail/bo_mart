@@ -45,14 +45,15 @@ class ProductRepository {
           response: products.copyWith(
             totalPages: totalPages,
             totalProducts: totalProducts,
+            currentPage: page,
           ),
-          page: page,
         ),
       );
 
       return products.copyWith(
         totalPages: totalPages,
         totalProducts: totalProducts,
+        currentPage: page,
       );
     } on Exception catch (_) {
       return _fetchProductsFromLocal(page);
@@ -61,11 +62,10 @@ class ProductRepository {
 
   Future<void> _storeProducts({
     required ProductResponse response,
-    required int page,
   }) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(
-      '${SharedPreferencesKey.products}_$page',
+      '${SharedPreferencesKey.products}_${response.currentPage}',
       jsonEncode(response.toJson()),
     );
   }

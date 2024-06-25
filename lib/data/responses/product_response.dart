@@ -10,6 +10,7 @@ class ProductResponse with _$ProductResponse {
     required List<Product> products,
     @Default(0) int totalPages,
     @Default(0) int totalProducts,
+    @Default(1) int currentPage,
   }) = _ProductResponse;
 
   factory ProductResponse.fromJson(Map<String, Object?> json) =>
