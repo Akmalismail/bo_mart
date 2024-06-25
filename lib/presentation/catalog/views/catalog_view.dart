@@ -20,6 +20,7 @@ class CatalogView extends StatefulWidget {
 class _CatalogViewState extends State<CatalogView> {
   final pagingController = CustomPagingController<int, Product>(
     firstPageKey: 1,
+    invisibleItemsThreshold: 1,
   );
   final debouncer = Debouncer();
   String searchText = '';
