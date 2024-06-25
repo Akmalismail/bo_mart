@@ -9,6 +9,7 @@ import 'package:bo_mart/presentation/catalog/widgets/catalog_list.dart';
 import 'package:bo_mart/presentation/catalog/widgets/catalog_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CatalogView extends StatefulWidget {
   const CatalogView({super.key});
@@ -36,7 +37,18 @@ class _CatalogViewState extends State<CatalogView> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: const CustomAppBar(titleText: 'Categories Name'),
+      appBar: CustomAppBar(
+        titleText: 'Categories Name',
+        menu: [
+          MenuItemButton(
+            child: const Text('Clear Cache'),
+            onPressed: () async {
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.clear();
+            },
+          ),
+        ],
+      ),
       body: Column(
         children: [
           Padding(
