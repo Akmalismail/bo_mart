@@ -7,6 +7,7 @@ import 'package:bo_mart/common/utils/extensions.dart';
 import 'package:bo_mart/common/utils/helper.dart';
 import 'package:bo_mart/data/remote/api_client.dart';
 import 'package:bo_mart/data/responses/product_response.dart';
+import 'package:bo_mart/domain/models/product.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProductRepository {
@@ -42,11 +43,7 @@ class ProductRepository {
 
       unawaited(
         _storeProducts(
-          response: products.copyWith(
-            totalPages: totalPages,
-            totalProducts: totalProducts,
-            currentPage: page,
-          ),
+          products: products.products,
         ),
       );
 
@@ -56,35 +53,36 @@ class ProductRepository {
         currentPage: page,
       );
     } on Exception catch (_) {
-      return _fetchProductsFromLocal(page);
+      return ProductResponse(
+        products: await _fetchProductsFromLocal(),
+      );
     }
   }
 
   Future<void> _storeProducts({
-    required ProductResponse response,
+    required List<Product> products,
   }) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(
-      '${SharedPreferencesKey.products}_${response.currentPage}',
-      jsonEncode(response.toJson()),
+      SharedPreferencesKey.products,
+      jsonEncode(products.map((product) => product.toJson()).toList()),
     );
   }
 
-  Future<ProductResponse> _fetchProductsFromLocal(int page) async {
+  Future<List<Product>> _fetchProductsFromLocal() async {
     final prefs = await SharedPreferences.getInstance();
 
     final String? response = prefs.getString(
-      '${SharedPreferencesKey.products}_$page',
+      SharedPreferencesKey.products,
     );
 
     if (response == null) {
       return Future.error(Exception('No data in local'));
     }
 
-    final products = await parseResponse(
-      response,
-      ProductResponse.fromJson,
-    );
+    final products = (jsonDecode(response) as List)
+        .map((product) => Product.fromJson(product))
+        .toList();
 
     return products;
   }
