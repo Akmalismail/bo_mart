@@ -3,9 +3,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:bo_mart/common/constants/constants.dart';
-import 'package:bo_mart/common/utils/extensions.dart';
-import 'package:bo_mart/data/api_exception.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -65,12 +62,6 @@ class ApiClient {
     String endpoint, {
     Map<String, dynamic>? query,
   }) async {
-    final isConnected = await Connectivity().isConnected;
-
-    if (!isConnected) {
-      return Future.error(NoInternetException());
-    }
-
     try {
       final response = await _dio.get(
         endpoint,
