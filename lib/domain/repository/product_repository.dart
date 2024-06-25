@@ -8,6 +8,7 @@ import 'package:bo_mart/common/utils/helper.dart';
 import 'package:bo_mart/data/remote/api_client.dart';
 import 'package:bo_mart/data/responses/product_response.dart';
 import 'package:bo_mart/domain/models/product.dart';
+import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProductRepository {
@@ -52,7 +53,7 @@ class ProductRepository {
         totalProducts: totalProducts,
         currentPage: page,
       );
-    } on Exception catch (_) {
+    } on DioException catch (_) {
       return ProductResponse(
         products: await _fetchProductsFromLocal(),
       );

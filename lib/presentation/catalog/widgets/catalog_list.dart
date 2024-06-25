@@ -46,11 +46,12 @@ class _CatalogListState extends ConsumerState<CatalogList> {
 
   @override
   Widget build(BuildContext context) {
-    // final provider = catalogNotifierProvider(pagingController);
     final provider = catalogNotifierProvider;
     ref.watch(provider);
     ref.listen(provider, (_, next) {
-      if (next is AsyncData && _completer != null && !_completer!.isCompleted) {
+      if ((next is AsyncData || next is AsyncError) &&
+          _completer != null &&
+          !_completer!.isCompleted) {
         _completer!.complete();
       }
 

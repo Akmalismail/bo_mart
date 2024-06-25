@@ -45,6 +45,7 @@ class _CatalogViewState extends State<CatalogView> {
             onPressed: () async {
               final prefs = await SharedPreferences.getInstance();
               await prefs.clear();
+              pagingController.itemList = null;
             },
           ),
         ],
